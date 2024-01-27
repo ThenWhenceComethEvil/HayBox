@@ -23,43 +23,62 @@ CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
+
+/*  Pin layout (I think)
+ *
+ *  +---------------------------------------------------+
+ *  |                                                   |
+ *  |  (05)(04)(03)(02)      (0)      (27)(22)(20)(18)  |
+ *  |                                 (27)(21)(19)(17)  |
+ *  |                                                   |
+ *  |                                                   |
+ *  |                                                   |
+ *  |                                  (12)             |
+ *  |           (06)(07)           (13)    (16)         |
+ *  |                                  (14)             |
+ *  |                              (15)                 |
+ *  |                                                   |
+ *  +---------------------------------------------------+
+ *
+ */
+
 GpioButtonMapping button_mappings[] = {
-    {&InputState::l,            5 },
-    { &InputState::left,        4 },
-    { &InputState::down,        3 },
-    { &InputState::right,       2 },
+    { &InputState::l           ,  5 },
+    { &InputState::left        ,  4 },
+    { &InputState::down        ,  3 },
+    { &InputState::right       ,  2 },
+                                  
+    { &InputState::mod_x       ,  6 },
+    { &InputState::mod_y       ,  7 },
 
-    { &InputState::mod_x,       6 },
-    { &InputState::mod_y,       7 },
+    { &InputState::select      , 10 },
+    { &InputState::start       ,  0 },
+    { &InputState::home        , 11 },
 
-    { &InputState::select,      10},
-    { &InputState::start,       0 },
-    { &InputState::home,        11},
+    { &InputState::c_left      , 13 },
+    { &InputState::c_up        , 12 },
+    { &InputState::c_down      , 15 },
+    { &InputState::a           , 14 },
+    { &InputState::c_right     , 16 },
 
-    { &InputState::c_left,      13},
-    { &InputState::c_up,        12},
-    { &InputState::c_down,      15},
-    { &InputState::a,           14},
-    { &InputState::c_right,     16},
+    { &InputState::b           , 26 },
+    { &InputState::x           , 21 },
+    { &InputState::z           , 19 },
+    { &InputState::up          , 17 },
 
-    { &InputState::b,           26},
-    { &InputState::x,           21},
-    { &InputState::z,           19},
-    { &InputState::up,          17},
-
-    { &InputState::r,           27},
-    { &InputState::y,           22},
-    { &InputState::lightshield, 20},
-    { &InputState::midshield,   18},
+    { &InputState::r           , 27 },
+    { &InputState::y           , 22 },
+    { &InputState::lightshield , 20 },
+    { &InputState::midshield   , 18 },
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
 const Pinout pinout = {
-    .joybus_data = 28,
-    .mux = -1,
+    .joybus_data    = 28,
+    .mux            = -1,
     .nunchuk_detect = -1,
-    .nunchuk_sda = -1,
-    .nunchuk_scl = -1,
+    .nunchuk_sda    = -1,
+    .nunchuk_scl    = -1,
 };
 
 void setup() {
@@ -91,30 +110,35 @@ void setup() {
         if (button_holds.x) {
             // If no console detected and X is held on plugin then use Switch USB backend.
             NintendoSwitchBackend::RegisterDescriptor();
-            backend_count = 1;
+            backend_count   = 1;
             primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
-            backends = new CommunicationBackend *[backend_count] { primary_backend };
+            backends        = new CommunicationBackend *[backend_count] { primary_backend };
 
             // Default to Ultimate mode on Switch.
             primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
             return;
+
         } else if (button_holds.z) {
             // If no console detected and Z is held on plugin then use DInput backend.
             TUGamepad::registerDescriptor();
             TUKeyboard::registerDescriptor();
-            backend_count = 2;
+            backend_count   = 2;
             primary_backend = new DInputBackend(input_sources, input_source_count);
-            backends = new CommunicationBackend *[backend_count] {
-                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
+            backends        = new CommunicationBackend *[backend_count] {
+                primary_backend,
+                new B0XXInputViewer(input_sources, input_source_count)
             };
+
         } else {
             // Default to XInput mode if no console detected and no other mode forced.
-            backend_count = 2;
+            backend_count   = 2;
             primary_backend = new XInputBackend(input_sources, input_source_count);
-            backends = new CommunicationBackend *[backend_count] {
-                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
+            backends        = new CommunicationBackend *[backend_count] {
+                primary_backend,
+                new B0XXInputViewer(input_sources, input_source_count)
             };
         }
+
     } else {
         if (console == ConnectedConsole::GAMECUBE) {
             primary_backend =

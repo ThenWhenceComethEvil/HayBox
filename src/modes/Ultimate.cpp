@@ -8,31 +8,31 @@
 Ultimate::Ultimate(socd::SocdType socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
-        socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
-        socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
-        socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
+        socd::SocdPair{ &InputState::left   , &InputState::right   , socd_type },
+        socd::SocdPair{ &InputState::down   , &InputState::up      , socd_type },
+        socd::SocdPair{ &InputState::c_left , &InputState::c_right , socd_type },
+        socd::SocdPair{ &InputState::c_down , &InputState::c_up    , socd_type },
     };
 }
 
 void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
-    outputs.b = inputs.b;
-    outputs.x = inputs.x;
-    outputs.y = inputs.y;
-    outputs.buttonL = inputs.lightshield;
-    outputs.buttonR = inputs.z || inputs.midshield;
+    outputs.a               = inputs.a;
+    outputs.b               = inputs.b;
+    outputs.x               = inputs.x;
+    outputs.y               = inputs.y;
+    outputs.buttonL         = inputs.lightshield;
+    outputs.buttonR         = inputs.z || inputs.midshield;
     outputs.triggerLDigital = inputs.l;
     outputs.triggerRDigital = inputs.r;
-    outputs.start = inputs.start;
-    outputs.select = inputs.select;
-    outputs.home = inputs.home;
+    outputs.start           = inputs.start;
+    outputs.select          = inputs.select;
+    outputs.home            = inputs.home;
 
     // Turn on D-Pad layer by holding Mod X + Mod Y or Nunchuk C button.
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
-        outputs.dpadUp = inputs.c_up;
-        outputs.dpadDown = inputs.c_down;
-        outputs.dpadLeft = inputs.c_left;
+        outputs.dpadUp    = inputs.c_up;
+        outputs.dpadDown  = inputs.c_down;
+        outputs.dpadLeft  = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
     }
 }
@@ -69,6 +69,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                 outputs.leftStickX = 128 + (directions.x * 36);
             }
         }
+
         // MX + Vertical = 44
         if (directions.vertical) {
             outputs.leftStickY = 128 + (directions.y * 44);
@@ -77,6 +78,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                 outputs.leftStickY = 128 + (directions.y * 51);
             }
         }
+
         if (directions.diagonal) {
             // MX + q1/2/3/4 = 53 35
             outputs.leftStickX = 128 + (directions.x * 53);
@@ -99,21 +101,25 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             // (33.44) = 53 35
             outputs.leftStickX = 128 + (directions.x * 53);
             outputs.leftStickY = 128 + (directions.y * 35);
+
             // (39.05) = 53 43
             if (inputs.c_down) {
                 outputs.leftStickX = 128 + (directions.x * 53);
                 outputs.leftStickY = 128 + (directions.y * 43);
             }
+
             // (36.35) = 53 39
             if (inputs.c_left) {
                 outputs.leftStickX = 128 + (directions.x * 53);
                 outputs.leftStickY = 128 + (directions.y * 39);
             }
+
             // (30.32) = 56 41
             if (inputs.c_up) {
                 outputs.leftStickX = 128 + (directions.x * 53);
                 outputs.leftStickY = 128 + (directions.y * 31);
             }
+
             // (27.85) = 49 42
             if (inputs.c_right) {
                 outputs.leftStickX = 128 + (directions.x * 53);
@@ -164,6 +170,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                 outputs.leftStickX = 128 + (directions.x * 36);
             }
         }
+
         // MY + Vertical (even if shield is held) = 53
         if (directions.vertical) {
             outputs.leftStickY = 128 + (directions.y * 53);
@@ -172,6 +179,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                 outputs.leftStickY = 128 + (directions.y * 36);
             }
         }
+
         if (directions.diagonal) {
             // MY + q1/2/3/4 = 35 59
             outputs.leftStickX = 128 + (directions.x * 35);
@@ -198,16 +206,19 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                 outputs.leftStickX = 128 + (directions.x * 43);
                 outputs.leftStickY = 128 + (directions.y * 53);
             }
+
             // (53.65) = 39 53
             if (inputs.c_left) {
                 outputs.leftStickX = 128 + (directions.x * 49);
                 outputs.leftStickY = 128 + (directions.y * 53);
             }
+
             // (59.68) = 31 53
             if (inputs.c_up) {
                 outputs.leftStickX = 128 + (directions.x * 31);
                 outputs.leftStickY = 128 + (directions.y * 53);
             }
+
             // (62.15) = 28 53
             if (inputs.c_right) {
                 outputs.leftStickX = 128 + (directions.x * 28);
@@ -224,16 +235,19 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                     outputs.leftStickX = 128 + (directions.x * 55);
                     outputs.leftStickY = 128 + (directions.y * 67);
                 }
+
                 // (53.82) = 49 67
                 if (inputs.c_left) {
                     outputs.leftStickX = 128 + (directions.x * 49);
                     outputs.leftStickY = 128 + (directions.y * 67);
                 }
+
                 // (59.8) = 39 67
                 if (inputs.c_up) {
                     outputs.leftStickX = 128 + (directions.x * 39);
                     outputs.leftStickY = 128 + (directions.y * 67);
                 }
+
                 // (62.42) = 35 67
                 if (inputs.c_right) {
                     outputs.leftStickX = 128 + (directions.x * 35);
