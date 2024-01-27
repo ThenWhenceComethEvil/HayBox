@@ -43,7 +43,7 @@ KeyboardMode *current_kb_mode = nullptr;
  */
 
 GpioButtonMapping button_mappings[] = {
-    { &InputState::up          , 17 },
+    { &InputState::up          ,  5 },
     { &InputState::left        ,  4 },
     { &InputState::down        ,  3 },
     { &InputState::right       ,  2 },
@@ -59,7 +59,7 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::c_down      , 15 },
     { &InputState::c_up        , 12 },
 
-    { &InputState::l           ,  5 },
+    { &InputState::l           , 17 },
     { &InputState::z           , 19 },
     { &InputState::x           , 21 },
     { &InputState::lightshield , 20 },
@@ -104,60 +104,14 @@ void setup() {
     static InputSource *input_sources[] = { gpio_input };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
-    ConnectedConsole console = detect_console(pinout.joybus_data);
-
-    /* Select communication backend. */
     CommunicationBackend *primary_backend;
-    if (console == ConnectedConsole::NONE) {
-        if (button_holds.x) {
-            // If no console detected and X is held on plugin then use Switch USB backend.
-            NintendoSwitchBackend::RegisterDescriptor();
-            backend_count   = 1;
-            primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
-            backends        = new CommunicationBackend *[backend_count] { primary_backend };
+    NintendoSwitchBackend::RegisterDescriptor();
+    backend_count   = 1;
+    primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
+    backends        = new CommunicationBackend *[backend_count] { primary_backend };
 
-            // Default to Ultimate mode on Switch.
-            primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
-            return;
-
-        } else if (button_holds.z) {
-            // If no console detected and Z is held on plugin then use DInput backend.
-            TUGamepad::registerDescriptor();
-            TUKeyboard::registerDescriptor();
-            backend_count   = 2;
-            primary_backend = new DInputBackend(input_sources, input_source_count);
-            backends        = new CommunicationBackend *[backend_count] {
-                primary_backend,
-                new B0XXInputViewer(input_sources, input_source_count)
-            };
-
-        } else {
-            // Default to XInput mode if no console detected and no other mode forced.
-            backend_count   = 2;
-            primary_backend = new XInputBackend(input_sources, input_source_count);
-            backends        = new CommunicationBackend *[backend_count] {
-                primary_backend,
-                new B0XXInputViewer(input_sources, input_source_count)
-            };
-        }
-
-    } else {
-        if (console == ConnectedConsole::GAMECUBE) {
-            primary_backend =
-                new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
-        } else if (console == ConnectedConsole::N64) {
-            primary_backend = new N64Backend(input_sources, input_source_count, pinout.joybus_data);
-        }
-
-        // If console then only using 1 backend (no input viewer).
-        backend_count = 1;
-        backends = new CommunicationBackend *[backend_count] { primary_backend };
-    }
-
-    // Default to Melee mode.
-    primary_backend->SetGameMode(
-        new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
-    );
+    // Default to Ultimate mode on Switch.
+    primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
 }
 
 void loop() {
