@@ -26,50 +26,52 @@ KeyboardMode *current_kb_mode = nullptr;
 
 /*  Pin layout (I think)
  *
- *  +---------------------------------------------------+
- *  |                                                   |
- *  |  (05)(04)(03)(02)      (0)      (27)(22)(20)(18)  |
- *  |                                 (27)(21)(19)(17)  |
- *  |                                                   |
- *  |                                                   |
- *  |                                                   |
- *  |                                  (12)             |
- *  |           (06)(07)           (13)    (16)         |
- *  |                                  (14)             |
- *  |                              (15)                 |
- *  |                                                   |
- *  +---------------------------------------------------+
+ *  +------------------------------------------------+
+ *  |  UP  LF  DN  RI               L   Z   X  LS    |
+ *  |  22   4   3   2      (0)     27  22  20  18    |
+ *  |                              27  21  19  17    |
+ *  |                               B   Y   R  MS    |
+ *  |                                                |
+ *  |                                                |
+ *  |            MX  MY                 12           |
+ *  |            09  10             13      16       |
+ *  |                                   14           |
+ *  |                               15               |
+ *  |                                                |
+ *  +------------------------------------------------+
  *
  */
 
 GpioButtonMapping button_mappings[] = {
-    { &InputState::l           ,  5 },
-    { &InputState::left        ,  4 },
-    { &InputState::down        ,  3 },
-    { &InputState::right       ,  2 },
+    { &InputState::up          , 22 },
+    { &InputState::left        ,  6 },
+    { &InputState::down        ,  5 },
+    { &InputState::right       ,  4 },
                                   
-    { &InputState::mod_x       ,  6 },
-    { &InputState::mod_y       ,  7 },
+    { &InputState::mod_x       ,  9 },
+    { &InputState::mod_y       , 10 },
 
-    { &InputState::select      , 10 },
     { &InputState::start       ,  0 },
-    { &InputState::home        , 11 },
 
-    { &InputState::c_left      , 13 },
-    { &InputState::c_up        , 12 },
-    { &InputState::c_down      , 15 },
-    { &InputState::a           , 14 },
-    { &InputState::c_right     , 16 },
+    { &InputState::a           , 19 },
+    { &InputState::c_left      , 17 },
+    { &InputState::c_right     , 21 },
+    { &InputState::c_down      , 20 },
+    { &InputState::c_up        , 16 },
 
-    { &InputState::b           , 26 },
-    { &InputState::x           , 21 },
-    { &InputState::z           , 19 },
-    { &InputState::up          , 17 },
+    { &InputState::l           ,  7 },
+    { &InputState::z           , 25 },
+    { &InputState::x           , 27 },
+    { &InputState::lightshield , 26 },
 
-    { &InputState::r           , 27 },
-    { &InputState::y           , 22 },
-    { &InputState::lightshield , 20 },
-    { &InputState::midshield   , 18 },
+    { &InputState::b           , 31 },
+    { &InputState::y           , 29 },
+    { &InputState::r           , 32 },
+    { &InputState::midshield   , 24 },
+
+    // NOOP.
+    { &InputState::select      , 14 },
+    { &InputState::home        , 15 },
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
