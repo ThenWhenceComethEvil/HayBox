@@ -27,17 +27,13 @@ KeyboardMode *current_kb_mode = nullptr;
 /*  Pin layout (I think)
  *
  *  +------------------------------------------------+
- *  |  MS  LF  DN  RI               L   Z   X  LS    |
- *  |  17   4   3   2      (0)      5  19  21  20    |
- *  |                              26  22  27  18    |
- *  |                               B   Y   R  UP    |
+ *  |                      (0)     27  22  20  18    |
+ *  |   5   4   3   2              26  21  19  17    |
  *  |                                                |
- *  |                                                |
- *  |            MX  MY                 12           |
- *  |             6  10             13      16       |
- *  |                                   14           |
+ *  |                                   12           |
+ *  |                               13      16       |
+ *  |             6   7                 14           |
  *  |                               15               |
- *  |                                                |
  *  +------------------------------------------------+
  *
  */
@@ -47,29 +43,29 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::left        ,  4 },
     { &InputState::down        ,  3 },
     { &InputState::right       ,  2 },
-                                  
+                                      
     { &InputState::mod_x       ,  6 },
-    { &InputState::mod_y       , 10 },
-
+    { &InputState::mod_y       ,  7 },
+                                      
     { &InputState::start       ,  0 },
-
+                                      
     { &InputState::a           , 14 },
     { &InputState::c_left      , 13 },
     { &InputState::c_right     , 16 },
     { &InputState::c_down      , 15 },
     { &InputState::c_up        , 12 },
-
-    { &InputState::l           , 17 },
-    { &InputState::z           , 19 },
-    { &InputState::x           , 21 },
-    { &InputState::lightshield , 20 },
-
+                                      
+    { &InputState::l           , 27 },
+    { &InputState::z           , 22 },
+    { &InputState::x           , 20 },
+    { &InputState::lightshield , 18 },
+                                      
     { &InputState::b           , 26 },
-    { &InputState::y           , 22 },
-    { &InputState::r           , 27 },
-    { &InputState::up          , 18 },
+    { &InputState::y           , 21 },
+    { &InputState::r           , 19 },
+    { &InputState::up          , 17 },
 
-    // NOOP.
+    // NOOP.                          
     { &InputState::select      , 8 },
     { &InputState::home        , 9 },
 };
@@ -123,24 +119,5 @@ void loop() {
 
     if (current_kb_mode != nullptr) {
         current_kb_mode->SendReport(backends[0]->GetInputs());
-    }
-}
-
-/* Nunchuk code runs on the second core */
-NunchukInput *nunchuk = nullptr;
-
-void setup1() {
-    while (backends == nullptr) {
-        tight_loop_contents();
-    }
-
-    // Create Nunchuk input source.
-    nunchuk = new NunchukInput(Wire, pinout.nunchuk_detect, pinout.nunchuk_sda, pinout.nunchuk_scl);
-}
-
-void loop1() {
-    if (backends != nullptr) {
-        nunchuk->UpdateInputs(backends[0]->GetInputs());
-        busy_wait_us(50);
     }
 }
