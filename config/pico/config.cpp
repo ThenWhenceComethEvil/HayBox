@@ -27,10 +27,10 @@ KeyboardMode *current_kb_mode = nullptr;
 /*  Pin layout (I think)
  *
  *  +------------------------------------------------+
- *  |  UP  LF  DN  RI               L   Z   X  LS    |
+ *  |  MS  LF  DN  RI               L   Z   X  LS    |
  *  |  17   4   3   2      (0)      5  19  21  20    |
  *  |                              26  22  27  18    |
- *  |                               B   Y   R  MS    |
+ *  |                               B   Y   R  UP    |
  *  |                                                |
  *  |                                                |
  *  |            MX  MY                 12           |
@@ -70,8 +70,8 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::up          , 18 },
 
     // NOOP.
-    { &InputState::select      , 10 },
-    { &InputState::home        , 11 },
+    { &InputState::select      , 8 },
+    { &InputState::home        , 9 },
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
