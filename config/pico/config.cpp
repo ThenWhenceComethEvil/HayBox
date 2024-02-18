@@ -39,7 +39,7 @@ KeyboardMode *current_kb_mode = nullptr;
  */
 
 GpioButtonMapping button_mappings[] = {
-    { &InputState::midshield   ,  5 },
+    { &InputState::lightshield ,  5 },
     { &InputState::left        ,  4 },
     { &InputState::down        ,  3 },
     { &InputState::right       ,  2 },
@@ -55,13 +55,13 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::c_down      , 15 },
     { &InputState::c_up        , 12 },
                                       
-    { &InputState::l           , 27 },
-    { &InputState::z           , 22 },
-    { &InputState::x           , 20 },
-    { &InputState::lightshield , 18 },
+    { &InputState::z           , 27 },
+    { &InputState::x           , 22 },
+    { &InputState::r           , 20 },
+    { &InputState::up          , 18 },
                                       
     { &InputState::b           , 26 },
-    { &InputState::y           , 21 },
+    { &InputState::x           , 21 },
     { &InputState::r           , 19 },
     { &InputState::up          , 17 },
 
